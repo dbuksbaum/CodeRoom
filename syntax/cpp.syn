@@ -1,0 +1,32 @@
+// Language: C++
+// Version: 0.1
+
+Separator:  ,
+
+keywords:
+bool,void,byte,char,int,short,long,double,long double,float,unsigned
+color:	    red
+bold:	    false
+italic:	    false
+underline:  false
+
+restofline:
+//
+color:	    grey
+bold:	    false
+italic:	    true
+underline:  false
+
+multiline:
+/* ,,, */
+color:	    grey
+bold:	    false
+italic:	    true
+underline:  false
+
+multiline:
+" ,,, "
+color:	    white
+bold:	    false
+italic:	    true
+underline:  false
