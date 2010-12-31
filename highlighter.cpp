@@ -1,5 +1,4 @@
 #include "highlighter.h"
-#include <QColor>
 
 Highlighter::Highlighter(Editor * editor, QTextDocument *parent) : QSyntaxHighlighter(parent)
 {
@@ -99,7 +98,7 @@ void Highlighter::loadSyntax(QString filename){
     // Load data
     QString data = editor->fileToStr(filename);
     // Find separator *******************************************
-    int i = data.indexOf("Separator:");
+    int i = data.indexOf("separator:");
     if (i == -1) return;
     QString sep = data.mid(i+10,1);
     // Find inlinewords *****************************************

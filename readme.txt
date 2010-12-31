@@ -1,4 +1,4 @@
-CodeRoom v0.1.5 Alpha
+CodeRoom v0.1.5 Development
 
 Keyboard commands:
 Ctrl + S: Save

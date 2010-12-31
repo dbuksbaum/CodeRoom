@@ -1,7 +1,7 @@
 // Language: C++
 // Version: 0.1
 
-Separator:,
+separator:,
 
 inlinewords:
 *, \, ?, ^, +, -, /, %, >, <, =, &, |, !,.,;
@@ -39,7 +39,7 @@ italic:	    false
 underline:  false
 
 freewords:
-return, if, else, elseif, break, continue, case, switch, for, while, do, throw, catch, try
+return, if, else, break, continue, case, switch, for, while, do, throw, catch, try
 color:	    #FF0000
 bold:	    false
 italic:	    false

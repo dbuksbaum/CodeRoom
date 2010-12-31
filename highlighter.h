@@ -9,6 +9,7 @@
 #include <QVector>
 #include <QTextFormat>
 #include <QFont>
+#include <QColor>
 
 class Editor;
 

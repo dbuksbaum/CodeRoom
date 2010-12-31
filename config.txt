@@ -7,4 +7,5 @@ Font-color: 		#00ff18
 Font-bold: 		false
 Font-italic: 		false
 Font-underline: 	false
+Tab-width:		20
 

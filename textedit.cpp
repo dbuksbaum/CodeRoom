@@ -10,6 +10,21 @@ TextEdit::TextEdit(Editor * parent) : QTextEdit(parent){
 void TextEdit::keyPressEvent(QKeyEvent * event){
     // Keep functionality of QTextEdit
     QTextEdit::keyPressEvent(event);
+    // Auto-indentation
+    if (event->key() == Qt::Key_Return) {
+	QString data = editor->dataToStr();
+	int cursorPosition = this->textCursor().position();
+	int i;
+	for (i=cursorPosition-2; i>=0; i--){
+	    if (data.mid(i,1) == "\n") {
+		break;
+	    }
+	}
+	while (data.mid(i+1,1) == "\t"){
+	    this->textCursor().insertText("\t");
+	    i++;
+	}
+    }
     // Save file
     if (event->key() == Qt::Key_S && event->modifiers() == Qt::ControlModifier) {
 	editor->saveFile();
