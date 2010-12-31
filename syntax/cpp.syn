@@ -1,0 +1,67 @@
+// Language: C++
+// Version: 0.1
+
+Separator:,
+
+inlinewords:
+*, \, ?, ^, +, -, /, %, >, <, =, &, |, !,.,;
+color:	    #B6D6D4
+bold:	    false
+italic:	    false
+underline:  false
+
+inlinewords:
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+color:	    #FFF600
+bold:	    false
+italic:	    false
+underline:  false
+
+inlinewords:
+(, ), [, ], {,}
+color:	    #B6D6D4
+bold:	    true
+italic:	    false
+underline:  false
+
+singlelinespan:
+#ifndef, #include, #define, #endif
+color:	    #FF0000
+bold:	    false
+italic:	    false
+underline:  false
+
+freewords:
+bool,void,byte,char,int,short,long,double,long double,float,unsigned
+color:	    #0C00FF
+bold:	    false
+italic:	    false
+underline:  false
+
+freewords:
+return, if, else, elseif, break, continue, case, switch, for, while, do, throw, catch, try
+color:	    #FF0000
+bold:	    false
+italic:	    false
+underline:  false
+
+singlelinespan:
+//
+color:	    #C9C9C9
+bold:	    false
+italic:	    true
+underline:  false
+
+multilinespan:
+/* ,,, */
+color:	    #C9C9C9
+bold:	    false
+italic:	    true
+underline:  false
+
+multilinespan:
+" ,,, "
+color:	    #FF00F6
+bold:	    false
+italic:	    true
+underline:  false
