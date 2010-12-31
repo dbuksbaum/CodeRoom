@@ -45,6 +45,7 @@ public:
     void saveFile();
     void saveFileAs();
     void newFile();
+    bool checkAndSave();
 };
 
 #endif // EDITOR_H

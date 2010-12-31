@@ -35,14 +35,20 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
     }
     // Open file
     if (event->key() == Qt::Key_O && event->modifiers() == Qt::ControlModifier) {
-	editor->openFile();
+	if (editor->checkAndSave()){
+	    editor->openFile();
+	}
     }
     // New file
     if (event->key() == Qt::Key_N && event->modifiers() == Qt::ControlModifier) {
-	editor->newFile();
+	if (editor->checkAndSave()){
+	    editor->newFile();
+	}
     }
     // Quit
     if (event->key() == Qt::Key_Q && event->modifiers() == Qt::ControlModifier) {
-	qApp->quit();
+	if (editor->checkAndSave()){
+	    qApp->quit();
+	}
     }
 }
