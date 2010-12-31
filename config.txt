@@ -1,0 +1,10 @@
+Width-percentage:	35
+Background-color: 	#000000
+Scroll-color: 		#00ff18
+Font: 			"DejaVu Sans Mono"
+Font-size: 		12px
+Font-color: 		#00ff18
+Font-bold: 		false
+Font-italic: 		false
+Font-underline: 	false
+
