@@ -1,73 +1,81 @@
 QWidget {
-    background-color: black;
+    background-color: BGCOLOR;
 }
 
 QMessageBox {
-    background-color: black;
+    background-color: BGCOLOR;
 }
 
 QLabel {
-    color: #00ff18;
+    color: LACOLOR;
 }
 
 QPushButton {
-    color: #00ff18;
-    background-color: black;
-    border: 2px solid #00ff18;
+    color: LACOLOR;
+    background-color: BGCOLOR;
+    border: 2px solid LACOLOR;
     width: 65px;
     height: 25px;
 }
 
 QMenu {
-    background-color: black;
-    border: 2px solid #00ff18;
+    background-color: BGCOLOR;
+    border: 2px solid LACOLOR;
 }
 
 QMenu::item {
     background-color: transparent;
-    color: #00ff18;
+    color: LACOLOR;
 }
 
 QMenu::item:selected {
-    background-color: green;
+    background-color: DACOLOR;
+}
+
+QMenu::separator {
+    height: 2px;
+    background: DACOLOR;
 }
 
 QTextEdit {
-    background-color: black;
-    color: #00ff18;
+    background-color: BGCOLOR;
+    color: FCOLOR;
     border-style: none;
-    font-family: "DejaVu Sans Mono";
-    font-size: 12px
+    font-family: FFAMILY;
+    font-size: FSIZE;
+    font-weight: FBOLD;
+    font-style: FITALIC;
+    text-decoration: FUNDERLINE;
 }
 
 QScrollBar:vertical {
-	margin: 20px 0px 20px 0px;
-	border: 2px solid black;
-	width: 15px;
+    margin: 20px 0px 20px 0px;
+    border: 2px solid BGCOLOR;
+    width: 15px;
 }
 
 QScrollBar::handle:vertical {
-	background: #00ff18;
-	min-height: 20px;
+    background: SCOLOR;
+    min-height: 20px;
 }
 
 QScrollBar::sub-line:vertical {
-	background: #00ff18;
-	width: 11px;
-	height: 15px;
-	subcontrol-position: top;
-	subcontrol-origin: margin;
+    background: SCOLOR;
+    width: 11px;
+    height: 15px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
 }
 
 QScrollBar::add-line:vertical {
-	background: #00ff18;
-	width: 11px;
-	height: 15px;
-	subcontrol-position: bottom;
-	subcontrol-origin: margin;
+    background: SCOLOR;
+    width: 11px;
+    height: 15px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
 }
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-	width: 15px;
-	background: none;
+    width: 15px;
+    background: none;
 }

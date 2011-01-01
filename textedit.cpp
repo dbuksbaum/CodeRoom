@@ -45,6 +45,10 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
 	    editor->newFile();
 	}
     }
+    // Set highlighting
+    if (event->key() == Qt::Key_H && event->modifiers() == Qt::ControlModifier) {
+	editor->chooseSyntax();
+    }
     // Quit
     if (event->key() == Qt::Key_Q && event->modifiers() == Qt::ControlModifier) {
 	if (editor->checkAndSave()){

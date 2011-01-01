@@ -1,23 +1,16 @@
 #include "editor.h"
-#include <QMessageBox>
 
 Editor::Editor(QWidget *parent) : QWidget(parent)
 {
-    // Apply style
-    this->loadStyle("style.sty");
     // Initialize text field
     textField = new TextEdit(this);
-    textField->setTabStopWidth(20);  // Tab width
     // Add highlighter
     highlighter = new Highlighter(this, textField->document());
     // Set up layout
     textLayout = new QHBoxLayout();
-    int textFieldStretch = 35;
-    int sideStretch = (100-textFieldStretch)/2;
-    textLayout->addStretch(sideStretch);
-    textLayout->addWidget(textField,textFieldStretch);
-    textLayout->addStretch(sideStretch);
     this->setLayout(textLayout);
+    // Apply style and configurations
+    this->setStyle();
     // No file is open
     fileIsOpen = false;
     openFilename = "";
@@ -28,20 +21,75 @@ Editor::~Editor(){
     delete textLayout;
 }
 
-void Editor::loadStyle(QString filename){
-    // Open file
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
-    // Create stream and load data
-    QTextStream in(&file);
-    QString style = "";
-    while (!in.atEnd()) {
-	QString line = in.readLine();
-	style.append(line);
+QString Editor::getConfHelper(QString str, QString conf){
+    int n, m;
+    m = conf.indexOf(str);
+    n = conf.indexOf(":",m)+1;
+    m = conf.indexOf("\n",n);
+    return conf.mid(n,m-n).trimmed();
+}
+
+void Editor::setStyle(){
+    // Open config and stylesheet files
+    QString style, conf;
+    try {
+	style = this->fileToStr("style.sty");
+	conf = this->fileToStr("config.cfg");
+    } catch (QString) {
+	QString tmp = this->dataToStr();
+	if (tmp != "") tmp += "\n";
+	tmp += "Error opening config.cfg or style.sty";
+	this->strToData(tmp);
+	style = "";
+	conf = "";
     }
-    file.close();
+    // Get width
+    int widthPercentage = this->getConfHelper("Width-percentage:",conf).toInt();
+    // Get tab-width
+    int tabWidth = this->getConfHelper("Tab-width:",conf).toInt();
+    // Set configurations
+    textField->setTabStopWidth(tabWidth);		    // Tab width
+    textLayout->addStretch((100-widthPercentage)/2);	    // Add spacing
+    textLayout->addWidget(textField,widthPercentage);	    // Add textfield to layout + stretch
+    textLayout->addStretch((100-widthPercentage)/2);	    // add spacing
+    // Get and set colors
+    style.replace("BGCOLOR",this->getConfHelper("Background-color:",conf));
+    style.replace("SCOLOR",this->getConfHelper("Scroll-color:",conf));
+    style.replace("LACOLOR",this->getConfHelper("Light-app-color:",conf));
+    style.replace("DACOLOR",this->getConfHelper("Dark-app-color:",conf));
+    style.replace("FCOLOR",this->getConfHelper("Font-color:",conf));
+    // Get font styles
+    style.replace("FFAMILY",this->getConfHelper("Font:",conf));
+    style.replace("FSIZE",this->getConfHelper("Font-size:",conf));
+    style.replace("FBOLD",( (this->getConfHelper("Font-bold:",conf) == "true") ? "bold" : "normal" ));
+    style.replace("FITALIC",( (this->getConfHelper("Font-italic:",conf) == "true") ? "italic" : "normal" ));
+    style.replace("FUNDERLINE",( (this->getConfHelper("Font-underline:",conf) == "true") ? "underline" : "none" ));
     // Apply style
     qApp->setStyleSheet(style);
+}
+
+void Editor::setSyntax(QString filename){
+    // Find extension
+    QString filetype;
+    for (int i=filename.length()-1; i>=0; i--){
+	if (filename.mid(i,1) == "."){
+	    filetype = " " + filename.mid(i+1,filename.length()-i) + " ";
+	}
+    }
+    // Set highlighting
+    if (QString(" cpp cc cxx h hpp hxx ").contains(filetype)) highlighter->loadSyntax("syntax/cpp.syn");
+    else if (QString(" latex tex bib ").contains(filetype)) highlighter->loadSyntax("syntax/latex.syn");
+    else highlighter->loadSyntax("syntax/text.syn");
+}
+
+void Editor::chooseSyntax(){
+    // Load data
+    QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "", tr("All Files (*)"));
+    // Check if filename is empty
+    if (filename == "") return;
+    // Set syntax
+    highlighter->loadSyntax(filename);
+    this->strToData(this->dataToStr()); // Refresh
 }
 
 void Editor::openFile(){
@@ -49,6 +97,8 @@ void Editor::openFile(){
     QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "", tr("All Files (*)"));
     // Check if filename is empty
     if (filename == "") return;
+    // Set syntax
+    this->setSyntax(filename);
     // Set data
     this->strToData(this->fileToStr(filename));
     // File is open
@@ -75,6 +125,9 @@ void Editor::saveFileAs(){
     this->strToFile(this->dataToStr(), filename);
     fileIsOpen = true;
     openFilename = filename;
+    // Set syntax
+    this->setSyntax(filename);
+    this->strToData(this->dataToStr()); // Refresh
 }
 
 void Editor::newFile(){
@@ -93,7 +146,7 @@ QString Editor::dataToStr(){
 void Editor::strToFile(QString str, QString filename){
     // Open file
     QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) throw QString("Error opening file");
     // Create stream and write data
     QTextStream out(&file);
     out << str;
@@ -107,7 +160,7 @@ void Editor::strToData(QString str){
 QString Editor::fileToStr(QString filename){
     // Open file
     QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return "Error opening file.";
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) throw QString("Error opening file");
     // Create stream and load data
     QTextStream in(&file);
     QString str = "";

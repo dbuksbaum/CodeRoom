@@ -4,8 +4,6 @@ Highlighter::Highlighter(Editor * editor, QTextDocument *parent) : QSyntaxHighli
 {
     // Save pointers to parents
     this->editor = editor;
-    // Load Syntax highlighting
-    this->loadSyntax("syntax/cpp.syn");
 }
 
 void Highlighter::highlightBlock(const QString &text)
@@ -64,6 +62,9 @@ QString Highlighter::translate(QString str){
     str.replace("}","\\}");
     str.replace("$","\\$");
     str.replace(".","\\.");
+    str.replace("\\\\s"," ");
+    str.replace("\\\\n","\n");
+    str.replace("\\\\t","\t");
     return str;
 }
 
@@ -95,8 +96,20 @@ void Highlighter::findFormatHelper(QString &data,HighlightingRule& rule,int i){
 }
 
 void Highlighter::loadSyntax(QString filename){
+    // Clear rules
+    singleRules.clear();
+    multiRules.clear();
     // Load data
-    QString data = editor->fileToStr(filename);
+    QString data;
+    try {
+	data = editor->fileToStr(filename);
+    } catch (QString) {
+	QString tmp = editor->dataToStr();
+	if (tmp != "") tmp += "\n";
+	tmp += "Syntax highlighting file, does not exists";
+	editor->strToData(tmp);
+	data = "";
+    }
     // Find separator *******************************************
     int i = data.indexOf("separator:");
     if (i == -1) return;
@@ -167,6 +180,37 @@ void Highlighter::loadSyntax(QString filename){
 	while (m < end){
 	    // Append to singleRules
 	    QString tmp = this->translate(data.mid(m,n-m).trimmed());
+	    m = n + 3;
+	    n = data.indexOf(sep,m);
+	    tmp += "[^";
+	    tmp += this->translate(data.mid(m,n-m).trimmed());
+	    tmp +="]*";
+	    tmp += this->translate(data.mid(m,n-m).trimmed());
+	    rule.word = QRegExp(tmp);
+	    singleRules.append(rule);
+	    // Set n and m
+	    m = n + 1;
+	    n = data.indexOf(sep+sep+sep,m);
+	}
+	// Update i and j
+	j = i + 1;
+	i = data.indexOf("singlelinespan:",j);
+    }
+    // Find restofline ******************************************
+    j = 0;
+    i = data.indexOf("restofline:");
+    while (i != -1) {
+	// Find format
+	HighlightingRule rule;
+	this->findFormatHelper(data,rule,i);
+	// Find words
+	int m = data.indexOf("\n",i) + 1;
+	int end = data.indexOf("\n",m)+1;
+	data.insert(end-1,sep);	    // Insert sep after last word
+	int n = data.indexOf(sep,m);
+	while (m < end){
+	    // Append to singleRules
+	    QString tmp = this->translate(data.mid(m,n-m).trimmed());
 	    tmp += "[^\n]*";
 	    rule.word = QRegExp(tmp);
 	    singleRules.append(rule);
@@ -176,7 +220,7 @@ void Highlighter::loadSyntax(QString filename){
 	}
 	// Update i and j
 	j = i + 1;
-	i = data.indexOf("singlelinespan:",j);
+	i = data.indexOf("restofline:",j);
     }
     // Find multilinespan ***************************************
     j = 0;

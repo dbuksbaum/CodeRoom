@@ -6,3 +6,4 @@ Ctrl + W: Save As
 Ctrl + O: Open
 Ctrl + N: New
 Ctrl + Q: Quit
+Ctrl + H: Choose Syntax Highlighting

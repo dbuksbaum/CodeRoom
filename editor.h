@@ -13,6 +13,7 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QFile>
+#include <QMessageBox>
 
 class TextEdit;
 class Highlighter;
@@ -29,7 +30,6 @@ private:
     // Variables
     QString openFilename;
     bool fileIsOpen;
-    bool fileIsSaved;
 public:
     // Constructors
     Editor(QWidget *parent = 0);
@@ -38,9 +38,12 @@ public:
     // Methods
     QString fileToStr(QString filename);
     QString dataToStr();
+    QString getConfHelper(QString str, QString conf);
     void strToFile(QString str, QString filename);
     void strToData(QString str);
-    void loadStyle(QString filename);
+    void setStyle();
+    void setSyntax(QString filename);
+    void chooseSyntax();
     void openFile();
     void saveFile();
     void saveFileAs();

@@ -23,4 +23,6 @@ OTHER_FILES += \
     syntax/cpp.syn \
     readme.txt \
     style.sty \
-    config.txt
+    syntax/latex.syn \
+    config.cfg \
+    syntax/text.syn
