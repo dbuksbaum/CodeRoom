@@ -57,10 +57,12 @@ void Editor::setStyle(){
     textLayout->setStretch(2,(100-widthPercentage)/2);	    // Set spacing stretch
     // Get and set colors
     style.replace("BGCOLOR",this->getConfHelper("Background-color:",conf));
-    style.replace("SCOLOR",this->getConfHelper("Scroll-color:",conf));
+    style.replace("SCCOLOR",this->getConfHelper("Scroll-color:",conf));
     style.replace("LACOLOR",this->getConfHelper("Light-app-color:",conf));
     style.replace("DACOLOR",this->getConfHelper("Dark-app-color:",conf));
     style.replace("FCOLOR",this->getConfHelper("Font-color:",conf));
+    style.replace("SCOLOR",this->getConfHelper("Selected-font-color:",conf));
+    style.replace("SBCOLOR",this->getConfHelper("Selected-background-color:",conf));
     // Get font styles
     style.replace("FFAMILY",this->getConfHelper("Font:",conf));
     style.replace("FSIZE",this->getConfHelper("Font-size:",conf));

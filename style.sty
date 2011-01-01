@@ -46,6 +46,8 @@ QTextEdit {
     font-weight: FBOLD;
     font-style: FITALIC;
     text-decoration: FUNDERLINE;
+    selection-color: SCOLOR;
+    selection-background-color: SBCOLOR;
 }
 
 QScrollBar:vertical {
@@ -55,12 +57,12 @@ QScrollBar:vertical {
 }
 
 QScrollBar::handle:vertical {
-    background: SCOLOR;
+    background: SCCOLOR;
     min-height: 20px;
 }
 
 QScrollBar::sub-line:vertical {
-    background: SCOLOR;
+    background: SCCOLOR;
     width: 11px;
     height: 15px;
     subcontrol-position: top;
@@ -68,7 +70,7 @@ QScrollBar::sub-line:vertical {
 }
 
 QScrollBar::add-line:vertical {
-    background: SCOLOR;
+    background: SCCOLOR;
     width: 11px;
     height: 15px;
     subcontrol-position: bottom;
