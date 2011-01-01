@@ -1,0 +1,62 @@
+// Language: C++
+// Version: 0.1
+
+// Instructions:
+// Use \s as space character
+// Do not use \n in linespans, use restofline instead
+// freewords cannot contain symbols
+
+// Priority:
+// multilinespan > regexp > restofline > singlelinespan > freewords > inlinewords
+// The lower a span appear in this document, the higher the priority. The above still apply though.
+
+separator:,
+
+regexp:
+\d
+color:	    #AE81FF
+bold:	    false
+italic:	    false
+underline:  false
+
+inlinewords:
+{ , }
+color:	    #A6E22E
+bold:	    false
+italic:	    false
+underline:  false
+
+singlelinespan:
+{ ,,, }
+color:	    #A6E22E
+bold:	    false
+italic:	    false
+underline:  false
+
+restofline:
+%
+color:	    #75715E
+bold:	    false
+italic:	    false
+underline:  false
+
+regexp:
+\\[a-zA-Z]*
+color:	    #66D9EF
+bold:	    false
+italic:	    false
+underline:  false
+
+regexp:
+\\[a-zA-Z]*(?=[^a-zA-Z{])
+color:	    #F92672
+bold:	    false
+italic:	    false
+underline:  false
+
+singlelinespan:
+$ ,,, $ , $$ ,,, $$
+color:	    #E6DB74
+bold:	    false
+italic:	    false
+underline:  false

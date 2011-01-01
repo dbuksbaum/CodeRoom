@@ -9,7 +9,13 @@ int main(int argc, char *argv[])
     // Run editor
     Editor editor;
     editor.showFullScreen();
-    //editor.showMaximized();
-
+    // Open file with
+    if (argc == 2){
+	// Get filename
+	QString filename(argv[1]);
+	// Open file
+	editor.openFile(filename);
+    }
+    // Run program
     return codeRoom.exec();
 }

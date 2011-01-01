@@ -45,6 +45,7 @@ public:
     void setSyntax(QString filename);
     void chooseSyntax();
     void openFile();
+    void openFile(QString filename);
     void saveFile();
     void saveFileAs();
     void newFile();

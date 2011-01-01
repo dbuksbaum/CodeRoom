@@ -95,6 +95,11 @@ void Editor::chooseSyntax(){
 void Editor::openFile(){
     // Load data
     QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "", tr("All Files (*)"));
+    // Open file
+    this->openFile(filename);
+}
+
+void Editor::openFile(QString filename){
     // Check if filename is empty
     if (filename == "") return;
     // Set syntax

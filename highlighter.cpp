@@ -222,6 +222,30 @@ void Highlighter::loadSyntax(QString filename){
 	j = i + 1;
 	i = data.indexOf("restofline:",j);
     }
+    // Find regexp ******************************************
+    j = 0;
+    i = data.indexOf("regexp:");
+    while (i != -1) {
+	// Find format
+	HighlightingRule rule;
+	this->findFormatHelper(data,rule,i);
+	// Find words
+	int m = data.indexOf("\n",i) + 1;
+	int end = data.indexOf("\n",m)+1;
+	data.insert(end-1,sep);	    // Insert sep after last word
+	int n = data.indexOf(sep,m);
+	while (m < end){
+	    // Append to singleRules
+	    rule.word = QRegExp(data.mid(m,n-m).trimmed());
+	    singleRules.append(rule);
+	    // Set n and m
+	    m = n + 1;
+	    n = data.indexOf(sep,m);
+	}
+	// Update i and j
+	j = i + 1;
+	i = data.indexOf("regexp:",j);
+    }
     // Find multilinespan ***************************************
     j = 0;
     i = data.indexOf("multilinespan:");
