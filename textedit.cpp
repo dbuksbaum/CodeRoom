@@ -5,6 +5,8 @@ using namespace std;
 TextEdit::TextEdit(Editor * parent) : QTextEdit(parent){
     // Store pointer to editor
     editor = parent;
+    // Only accept plain text
+    this->setAcceptRichText(false);
 }
 
 void TextEdit::keyPressEvent(QKeyEvent * event){

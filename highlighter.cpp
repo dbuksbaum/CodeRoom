@@ -24,14 +24,24 @@ void Highlighter::highlightBlock(const QString &text)
     foreach (const HighlightingRule &rule, multiRules) {
 	QRegExp startExpression(rule.start);
 	QRegExp endExpression(rule.end);
+	QRegExp notBehind(rule.word);
 	int startIndex = 0;
 	if (previousBlockState() != blockState) startIndex = startExpression.indexIn(text);
 	while (startIndex >= 0) {
 	    int endIndex;
+	    // Workaround for negative lookbehind
+	    notBehind.indexIn(text);
+	    int lengthDiff = notBehind.matchedLength() - startExpression.matchedLength();
+	    int behindIndex = startIndex - lengthDiff;
+	    if (notBehind != QRegExp("") && behindIndex >= 0 && notBehind.indexIn(text.mid(behindIndex,notBehind.matchedLength())) != -1){
+		startIndex = startExpression.indexIn(text,startIndex+1);
+		continue;
+	    }
 	    if (previousBlockState() == blockState){
-		endIndex = endExpression.indexIn(text, startIndex);
+		if (startIndex == 0) endIndex = endExpression.indexIn(text, startIndex);
+		else endIndex = endExpression.indexIn(text, startIndex+startExpression.matchedLength());
 	    } else {
-		endIndex = endExpression.indexIn(text, startIndex+1);
+		endIndex = endExpression.indexIn(text, startIndex+startExpression.matchedLength());
 	    }
 	    int multiLength;
 	    if (endIndex == -1) {
@@ -222,9 +232,9 @@ void Highlighter::loadSyntax(QString filename){
 	j = i + 1;
 	i = data.indexOf("restofline:",j);
     }
-    // Find regexp ******************************************
+    // Find singleregexp ******************************************
     j = 0;
-    i = data.indexOf("regexp:");
+    i = data.indexOf("singleregexp:");
     while (i != -1) {
 	// Find format
 	HighlightingRule rule;
@@ -244,7 +254,7 @@ void Highlighter::loadSyntax(QString filename){
 	}
 	// Update i and j
 	j = i + 1;
-	i = data.indexOf("regexp:",j);
+	i = data.indexOf("singleregexp:",j);
     }
     // Find multilinespan ***************************************
     j = 0;
@@ -272,5 +282,62 @@ void Highlighter::loadSyntax(QString filename){
 	// Update i and j
 	j = i + 1;
 	i = data.indexOf("multilinespan:",j);
+    }
+    // Find multiregexp ***************************************
+    j = 0;
+    i = data.indexOf("multiregexp:");
+    while (i != -1) {
+	// Find format
+	HighlightingRule rule;
+	this->findFormatHelper(data,rule,i);
+	// Find words
+	int m = data.indexOf("\n",i) + 1;
+	int end = data.indexOf("\n",m)+1;
+	data.insert(end-1,sep);	    // Insert sep after last word
+	int n = data.indexOf(sep,m);
+	while (m < end){
+	    // Append to singleRules
+	    rule.start = QRegExp(data.mid(m,n-m).trimmed());
+	    m = n + 3;
+	    n = data.indexOf(sep,m);
+	    rule.end = QRegExp(data.mid(m,n-m).trimmed());
+	    multiRules.append(rule);
+	    // Set n and m
+	    m = n + 1;
+	    n = data.indexOf(sep+sep+sep,m);
+	}
+	// Update i and j
+	j = i + 1;
+	i = data.indexOf("multiregexp:",j);
+    }
+    // Find behindregexp ***************************************
+    j = 0;
+    i = data.indexOf("behindregexp:");
+    while (i != -1) {
+	// Find format
+	HighlightingRule rule;
+	this->findFormatHelper(data,rule,i);
+	// Find words
+	int m = data.indexOf("\n",i) + 1;
+	int end = data.indexOf("\n",m)+1;
+	data.insert(end-1,sep);	    // Insert sep after last word
+	int n = data.indexOf(sep,m);
+	while (m < end){
+	    // Append to singleRules
+	    rule.word = QRegExp(data.mid(m,n-m).trimmed());
+	    m = n + 3;
+	    n = data.indexOf(sep,m);
+	    rule.start = QRegExp(data.mid(m,n-m).trimmed());
+	    m = n + 3;
+	    n = data.indexOf(sep,m);
+	    rule.end = QRegExp(data.mid(m,n-m).trimmed());
+	    multiRules.append(rule);
+	    // Set n and m
+	    m = n + 1;
+	    n = data.indexOf(sep+sep+sep,m);
+	}
+	// Update i and j
+	j = i + 1;
+	i = data.indexOf("behindregexp:",j);
     }
 }

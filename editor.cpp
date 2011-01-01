@@ -9,6 +9,9 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     // Set up layout
     textLayout = new QHBoxLayout();
     this->setLayout(textLayout);
+    textLayout->addStretch();		    // Add spacing
+    textLayout->addWidget(textField);	    // Add textfield to layout
+    textLayout->addStretch();		    // add spacing
     // Apply style and configurations
     this->setStyle();
     // No file is open
@@ -49,9 +52,9 @@ void Editor::setStyle(){
     int tabWidth = this->getConfHelper("Tab-width:",conf).toInt();
     // Set configurations
     textField->setTabStopWidth(tabWidth);		    // Tab width
-    textLayout->addStretch((100-widthPercentage)/2);	    // Add spacing
-    textLayout->addWidget(textField,widthPercentage);	    // Add textfield to layout + stretch
-    textLayout->addStretch((100-widthPercentage)/2);	    // add spacing
+    textLayout->setStretch(0,(100-widthPercentage)/2);	    // Set spacing stretch
+    textLayout->setStretch(1,widthPercentage);		    // Set textField stretch
+    textLayout->setStretch(2,(100-widthPercentage)/2);	    // Set spacing stretch
     // Get and set colors
     style.replace("BGCOLOR",this->getConfHelper("Background-color:",conf));
     style.replace("SCOLOR",this->getConfHelper("Scroll-color:",conf));

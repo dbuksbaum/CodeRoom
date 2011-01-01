@@ -8,7 +8,7 @@ QT       += core gui
 
 TARGET = CodeRoom
 TEMPLATE = app
-
+RC_FILE = coderoom.rc
 
 SOURCES += main.cpp\
         editor.cpp \
@@ -25,4 +25,5 @@ OTHER_FILES += \
     style.sty \
     syntax/latex.syn \
     config.cfg \
-    syntax/text.syn
+    syntax/text.syn \
+    coderoom.rc

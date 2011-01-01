@@ -7,12 +7,12 @@
 // freewords cannot contain symbols
 
 // Priority:
-// multilinespan > regexp > restofline > singlelinespan > freewords > inlinewords
+// behindregexp > multiregexp > multilinespan > regexp > restofline > singlelinespan > freewords > inlinewords
 // The lower a span appear in this document, the higher the priority. The above still apply though.
 
 separator:,
 
-regexp:
+singleregexp:
 \d
 color:	    #AE81FF
 bold:	    false
@@ -26,36 +26,74 @@ bold:	    false
 italic:	    false
 underline:  false
 
-singlelinespan:
-{ ,,, }
+inlinewords:
+[ , ]
 color:	    #A6E22E
 bold:	    false
 italic:	    false
 underline:  false
 
-restofline:
-%
-color:	    #75715E
-bold:	    false
-italic:	    false
-underline:  false
-
-regexp:
+singleregexp:
 \\[a-zA-Z]*
 color:	    #66D9EF
 bold:	    false
 italic:	    false
 underline:  false
 
-regexp:
+singleregexp:
 \\[a-zA-Z]*(?=[^a-zA-Z{])
 color:	    #F92672
 bold:	    false
 italic:	    false
 underline:  false
 
-singlelinespan:
-$ ,,, $ , $$ ,,, $$
+singleregexp:
+\\[^a-zA-Z]
+color:	    #AE81FF
+bold:	    false
+italic:	    false
+underline:  false
+
+singleregexp:
+\\[L][a][T][e][X]\\
+color:	    #F92672
+bold:	    false
+italic:	    false
+underline:  false
+
+// QRegExp does not support lookbehind, this is a workaround
+// The expression cannot start with first argument
+
+behindregexp:
+\\[[] ,,, [[] ,,, []]
+color:	    #A6E22E
+bold:	    false
+italic:	    false
+underline:  false
+
+behindregexp:
+\\[{] ,,, [{] ,,, [}]
+color:	    #A6E22E
+bold:	    false
+italic:	    false
+underline:  false
+
+behindregexp:
+\\[%] ,,, [%] ,,, .*[^\n]
+color:	    #E6DB74
+bold:	    false
+italic:	    false
+underline:  false
+
+behindregexp:
+\\[$] ,,, [$] ,,, [$]
+color:	    #E6DB74
+bold:	    false
+italic:	    false
+underline:  false
+
+behindregexp:
+\\[$][$] ,,, [$][$] ,,, [$][$]
 color:	    #E6DB74
 bold:	    false
 italic:	    false
