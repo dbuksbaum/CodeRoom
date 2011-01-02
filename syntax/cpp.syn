@@ -7,7 +7,7 @@
 // freewords cannot contain symbols
 
 // Priority:
-// multilinespan > regexp > restofline > singlelinespan > freewords > inlinewords
+// multibehindregexp > multiregexp > multilinespan > singlebehindregexp > singleregexp > restofline > singlelinespan > freewords > inlinewords
 // The lower a span appear in this document, the higher the priority. The above still apply though.
 
 separator:,
