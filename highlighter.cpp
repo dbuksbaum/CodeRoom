@@ -11,8 +11,17 @@ void Highlighter::highlightBlock(const QString &text)
     // Single word highlights
     foreach (const HighlightingRule &rule, singleRules) {
 	QRegExp expression(rule.word);
+	QRegExp notBehind(rule.start);
 	int index = expression.indexIn(text);
 	while (index >= 0) {
+	    // Workaround for negative lookbehind **
+	    notBehind.indexIn(text);
+	    int behindIndex = index - notBehind.matchedLength();
+	    if (notBehind != QRegExp("") && behindIndex >= 0 && notBehind.indexIn(text.mid(behindIndex,notBehind.matchedLength())) != -1){
+		index = expression.indexIn(text,index + 1);
+		continue;
+	    }
+	    // *************************************
 	    int length = expression.matchedLength();
 	    setFormat(index, length, rule.format);
 	    index = expression.indexIn(text, index + length);
@@ -29,14 +38,14 @@ void Highlighter::highlightBlock(const QString &text)
 	if (previousBlockState() != blockState) startIndex = startExpression.indexIn(text);
 	while (startIndex >= 0) {
 	    int endIndex;
-	    // Workaround for negative lookbehind
+	    // Workaround for negative lookbehind **
 	    notBehind.indexIn(text);
-	    int lengthDiff = notBehind.matchedLength() - startExpression.matchedLength();
-	    int behindIndex = startIndex - lengthDiff;
+	    int behindIndex = startIndex - notBehind.matchedLength();
 	    if (notBehind != QRegExp("") && behindIndex >= 0 && notBehind.indexIn(text.mid(behindIndex,notBehind.matchedLength())) != -1){
 		startIndex = startExpression.indexIn(text,startIndex+1);
 		continue;
 	    }
+	    // *************************************
 	    if (previousBlockState() == blockState){
 		if (startIndex == 0) endIndex = endExpression.indexIn(text, startIndex);
 		else endIndex = endExpression.indexIn(text, startIndex+startExpression.matchedLength());
@@ -310,9 +319,36 @@ void Highlighter::loadSyntax(QString filename){
 	j = i + 1;
 	i = data.indexOf("multiregexp:",j);
     }
-    // Find behindregexp ***************************************
+    // Find singlebehindregexp **************************************
     j = 0;
-    i = data.indexOf("behindregexp:");
+    i = data.indexOf("singlebehindregexp:");
+    while (i != -1) {
+	// Find format
+	HighlightingRule rule;
+	this->findFormatHelper(data,rule,i);
+	// Find words
+	int m = data.indexOf("\n",i) + 1;
+	int end = data.indexOf("\n",m)+1;
+	data.insert(end-1,sep);	    // Insert sep after last word
+	int n = data.indexOf(sep,m);
+	while (m < end){
+	    // Append to singleRules
+	    rule.start = QRegExp(data.mid(m,n-m).trimmed());
+	    m = n + 3;
+	    n = data.indexOf(sep,m);
+	    rule.word = QRegExp(data.mid(m,n-m).trimmed());
+	    singleRules.append(rule);
+	    // Set n and m
+	    m = n + 1;
+	    n = data.indexOf(sep+sep+sep,m);
+	}
+	// Update i and j
+	j = i + 1;
+	i = data.indexOf("singlebehindregexp:",j);
+    }
+    // Find multibehindregexp ***************************************
+    j = 0;
+    i = data.indexOf("multibehindregexp:");
     while (i != -1) {
 	// Find format
 	HighlightingRule rule;
@@ -338,6 +374,6 @@ void Highlighter::loadSyntax(QString filename){
 	}
 	// Update i and j
 	j = i + 1;
-	i = data.indexOf("behindregexp:",j);
+	i = data.indexOf("multibehindregexp:",j);
     }
 }
