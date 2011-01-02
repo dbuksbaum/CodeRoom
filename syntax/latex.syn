@@ -55,7 +55,7 @@ italic:	    false
 underline:  false
 
 singleregexp:
-\\[L][a][T][e][X]\\
+\\[L][a][T][e][X]\\ , \\[T][e][X]\\
 color:	    #F92672
 bold:	    false
 italic:	    false
