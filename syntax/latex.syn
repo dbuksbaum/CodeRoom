@@ -80,7 +80,7 @@ underline:  false
 
 multibehindregexp:
 \\ ,,, [%] ,,, .*[^\n]
-color:	    #E6DB74
+color:	    #75715E
 bold:	    false
 italic:	    false
 underline:  false
