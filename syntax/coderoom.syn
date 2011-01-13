@@ -1,0 +1,52 @@
+// Language: CodeRoom Configuration Files
+// Version: 0.1
+
+// Instructions:
+// Use \s as space character
+// Do not use \n in linespans, use restofline instead
+// freewords cannot contain symbols
+
+// Priority:
+// multibehindregexp > multiregexp > multilinespan > singlebehindregexp > singleregexp > restofline > singlelinespan > freewords > inlinewords
+// The lower a span appear in this document, the higher the priority. The above still apply though.
+
+// For quickinsert you can use \n and \t only. Place cursor using separator.
+
+// Use // to comment. Comment must not contain COLON. Comments should have a free line or another comment above it.
+
+separator:,
+
+inlinewords:
+quickinsert , multibehindregexp , multiregexp , multilinespan , singlebehindregexp , singleregexp , restofline , singlelinespan , freewords , inlinewords, separator
+color:		#A6E22E
+bold:			false
+italic:		false
+underline:	false
+
+inlinewords:
+- , Width , percentage , Tab , width , Background , color , Scroll , Light , app , Dark , Font , size , bold , italic , underline , Selected , font , background
+color:		#66D9EF
+bold:			false
+italic:		false
+underline:	false
+
+restofline:
+:
+color:		#F92672
+bold:			false
+italic:		false
+underline:	false
+
+singleregexp:
+:
+color:		#FFFFFF
+bold:			false
+italic:		false
+underline:	false
+
+restofline:
+//
+color:		#FFFFFF
+bold:			false
+italic:		false
+underline:	false
