@@ -6,6 +6,9 @@
 int main(int argc, char *argv[])
 {
     QApplication codeRoom(argc, argv);
+    // Force working directory
+    QDir dir(QCoreApplication::applicationDirPath());
+    QDir::setCurrent(dir.absolutePath());
     // Run editor
     Editor editor;
     editor.showFullScreen();
