@@ -5,6 +5,7 @@
 #include <QTextEdit>
 #include <QKeyEvent>
 #include <QString>
+#include <QVector>
 
 class Editor;
 
@@ -15,6 +16,8 @@ private:
     Q_OBJECT
     // Pointer to editor
     Editor * editor;
+    QVector<int> skipKeys;
+    bool skipKey;
 protected:
     // On keypress
     void keyPressEvent(QKeyEvent * event);

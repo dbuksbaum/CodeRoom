@@ -14,6 +14,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QMessageBox>
+#include <QPair>
 
 class TextEdit;
 class Highlighter;
@@ -50,6 +51,8 @@ public:
     void saveFileAs();
     void newFile();
     bool checkAndSave();
+    // Public shortcut vector
+    QVector< QPair<QString,int> > quickInsert;
 };
 
 #endif // EDITOR_H

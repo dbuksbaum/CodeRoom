@@ -17,6 +17,8 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     // No file is open
     fileIsOpen = false;
     openFilename = "";
+    // Initialize shortcut vector
+    quickInsert = QVector< QPair<QString,int> >(8,QPair<QString,int>("",0));
 }
 
 Editor::~Editor(){
@@ -84,6 +86,7 @@ void Editor::setSyntax(QString filename){
     // Set highlighting
     if (QString(" cpp cc cxx h hpp hxx ").contains(filetype)) highlighter->loadSyntax("syntax/cpp.syn");
     else if (QString(" latex tex bib ").contains(filetype)) highlighter->loadSyntax("syntax/latex.syn");
+    else if (QString(" syn cfg ").contains(filetype)) highlighter->loadSyntax("syntax/coderoom.syn");
     else highlighter->loadSyntax("syntax/text.syn");
 }
 

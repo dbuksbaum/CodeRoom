@@ -1,65 +1,66 @@
-// Language: C++
+// Language: LaTeX
 // Version: 0.1
-
-// Instructions:
-// Use \s as space character
-// Do not use \n in linespans, use restofline instead
-// freewords cannot contain symbols
-
-// Priority:
-// multibehindregexp > multiregexp > multilinespan > singlebehindregexp > singleregexp > restofline > singlelinespan > freewords > inlinewords
-// The lower a span appear in this document, the higher the priority. The above still apply though.
 
 separator:,
 
+quickinsert:
+\cite{,}
+\ref{,}
+\label{,}
+\begin{}\n\t,\n\end{}
+$,$
+$$,$$
+\[,\]
+{,}
+
 singleregexp:
 \d
-color:	    #AE81FF
-bold:	    false
-italic:	    false
-underline:  false
+color:			#AE81FF
+bold:				false
+italic:			false
+underline: 		false
 
 inlinewords:
 { , }
-color:	    #A6E22E
-bold:	    false
-italic:	    false
-underline:  false
+color:			#A6E22E
+bold:				false
+italic:			false
+underline: 		false
 
 inlinewords:
 [ , ]
-color:	    #A6E22E
-bold:	    false
-italic:	    false
-underline:  false
+color:			#A6E22E
+bold:				false
+italic:			false
+underline: 		false
 
 singleregexp:
 \\[a-zA-Z]*
-color:	    #66D9EF
-bold:	    false
-italic:	    false
-underline:  false
+color:			#F92672
+bold:				false
+italic:			false
+underline: 		false
 
 singleregexp:
-\\[a-zA-Z]*(?=[^a-zA-Z{])
-color:	    #F92672
-bold:	    false
-italic:	    false
-underline:  false
+\\[a-zA-Z]*(?=[{])
+color:			#66D9EF
+bold:				false
+italic:			false
+underline: 		false
 
 singleregexp:
 \\[^a-zA-Z]
-color:	    #AE81FF
-bold:	    false
-italic:	    false
-underline:  false
+color:			#AE81FF
+bold:				false
+italic:			false
+underline: 		false
 
 singleregexp:
 \\[L][a][T][e][X]\\ , \\[T][e][X]\\
-color:	    #F92672
-bold:	    false
-italic:	    false
-underline:  false
+color:			#F92672
+bold:				false
+italic:			false
+underline: 		false
 
 // QRegExp does not support lookbehind, this is a workaround
 // The expression cannot start with first argument
@@ -67,34 +68,41 @@ underline:  false
 singlebehindregexp:
 \\ ,,, [[][^]]*[]]
 color:	    #A6E22E
-bold:	    false
-italic:	    false
-underline:  false
+bold:				false
+italic:			false
+underline: 		false
 
 singlebehindregexp:
 \\ ,,, [{][^}]*[}]
-color:	    #A6E22E
-bold:	    false
-italic:	    false
-underline:  false
+color:			#A6E22E
+bold:				false
+italic:			false
+underline: 		false
 
 multibehindregexp:
 \\ ,,, [%] ,,, .*[^\n]
-color:	    #75715E
-bold:	    false
-italic:	    false
-underline:  false
+color:			#75715E
+bold:				false
+italic:			false
+underline: 		false
 
 multibehindregexp:
 \\ ,,, [$] ,,, [$]
-color:	    #E6DB74
-bold:	    false
-italic:	    false
-underline:  false
+color:			#E6DB74
+bold:				false
+italic:			false
+underline: 		false
 
 multibehindregexp:
 \\ ,,, [$][$] ,,, [$][$]
-color:	    #E6DB74
-bold:	    false
-italic:	    false
-underline:  false
+color:			#E6DB74
+bold:				false
+italic:			false
+underline: 		false
+
+multiregexp:
+[\\][\[] ,,, [\\][\]]
+color:			#E6DB74
+bold:				false
+italic:			false
+underline: 		false

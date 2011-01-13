@@ -1,83 +1,74 @@
 // Language: C++
 // Version: 0.1
 
-// Instructions:
-// Use \s as space character
-// Do not use \n in linespans, use restofline instead
-// freewords cannot contain symbols
-
-// Priority:
-// multibehindregexp > multiregexp > multilinespan > singlebehindregexp > singleregexp > restofline > singlelinespan > freewords > inlinewords
-// The lower a span appear in this document, the higher the priority. The above still apply though.
-
 separator:,
 
 inlinewords:
 *, \, ?, ^, +, -, /, %, >, <, =, &, |, !,.,;
-color:	    #FFFFFF
-bold:	    false
-italic:	    false
-underline:  false
+color:			#FFFFFF
+bold:				false
+italic:			false
+underline: 		false
 
 inlinewords:
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-color:	    #AE81FF
-bold:	    false
-italic:	    false
-underline:  false
+color:	    	#AE81FF
+bold:				false
+italic:			false
+underline: 		false
 
 inlinewords:
 (, ), [, ], {,}
-color:	    #A6E22E
-bold:	    false
-italic:	    false
-underline:  false
+color:	    	#A6E22E
+bold:				false
+italic:			false
+underline: 		false
 
 singlelinespan:
 " ,,, "
-color:	    #E6DB74
-bold:	    false
-italic:	    false
-underline:  false
+color:	    	#E6DB74
+bold:				false
+italic:			false
+underline: 		false
 
 freewords:
 bool,void,char,int,short,long,double,float,unsigned,enum,struct,class,typedef,wchar_t
-color:	    #66D9EF
-bold:	    false
-italic:	    false
-underline:  false
+color:	    	#66D9EF
+bold:				false
+italic:			false
+underline: 		false
 
 freewords:
 return, if, else, break, continue, case, switch, for, while, do, throw, catch, try,public,private,protected,using,namespace
-color:	    #F92672
-bold:	    false
-italic:	    false
-underline:  false
+color:	    	#F92672
+bold:				false
+italic:			false
+underline: 		false
 
 freewords:
 std,string,vector,map,list,deque,stack,queue,priority_queue,set,multiset,multimap,bitset,ostream,istream,ofstream,ifstream,fstream,iostream,stringstream,istringstream,ostringstream,cin,cout,cerr,clog
-color:	    #A6E22E
-bold:	    false
-italic:	    false
-underline:  false
+color:			#A6E22E
+bold:				false
+italic:			false
+underline: 		false
 
 restofline:
 #
-color:	    #F92672
-bold:	    false
-italic:	    false
-underline:  false
+color:			#F92672
+bold:				false
+italic:			false
+underline: 		false
 
 restofline:
 //
-color:	    #75715E
-bold:	    false
-italic:	    false
-underline:  false
+color:			#75715E
+bold:				false
+italic:			false
+underline: 		false
 
 multilinespan:
 /* ,,, */
-color:	    #75715E
-bold:	    false
-italic:	    false
-underline:  false
+color:			#75715E
+bold:				false
+italic:			false
+underline: 		false

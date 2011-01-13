@@ -122,6 +122,7 @@ void Highlighter::loadSyntax(QString filename){
     QString data;
     try {
 	data = editor->fileToStr(filename);
+        data.remove(QRegExp("[\n][^:]*[\n][/][/][^\n]*"));
     } catch (QString) {
 	QString tmp = editor->dataToStr();
 	if (tmp != "") tmp += "\n";
@@ -375,5 +376,23 @@ void Highlighter::loadSyntax(QString filename){
 	// Update i and j
 	j = i + 1;
 	i = data.indexOf("multibehindregexp:",j);
+    }
+    // Find quickinsert *********************************************
+    int m = 0;
+    i = data.indexOf("quickinsert:");
+    if (i != -1) {
+        j = data.indexOf("\n",i);
+        i = data.indexOf("\n",j+1);
+    }
+    while (i != -1) {
+        if (data.mid(j+1,i-j-1).trimmed() == "") break;
+        QString tmp = data.mid(j+1,i-j-1).trimmed();
+        tmp.replace("\\n","\n").replace("\\\n","\\n");
+        tmp.replace("\\t","\t").replace("\\\t","\\t");
+        editor->quickInsert[m].second = tmp.size()-tmp.indexOf(sep)-1;
+        editor->quickInsert[m].first = tmp.replace(sep,"");
+        j = i;
+        i = data.indexOf("\n",j+1);
+        m++;
     }
 }

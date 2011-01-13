@@ -26,4 +26,5 @@ OTHER_FILES += \
     syntax/latex.syn \
     config.cfg \
     syntax/text.syn \
-    coderoom.rc
+    coderoom.rc \
+    syntax/coderoom.syn
