@@ -4,14 +4,14 @@
 separator:,
 
 quickinsert:
-\cite{,}
-\ref{,}
-\label{,}
-\begin{}\n\t,\n\end{}
-$,$
-$$,$$
-\[,\]
-{,}
+\cite{,, ,}
+\ref{,, ,}
+\label{,, ,}
+\begin{,,,}\n\t,, ,\n\end{,,,}
+$,, ,$
+\[,, ,\]
+[,, ,]
+{,, ,}
 
 singleregexp:
 \d
@@ -21,7 +21,7 @@ italic:			false
 underline: 		false
 
 inlinewords:
-{ , }
+{ , } , [ , ]
 color:			#A6E22E
 bold:				false
 italic:			false
@@ -63,15 +63,19 @@ underline: 		false
 // QRegExp does not support lookbehind, this is a workaround
 // The expression cannot start with first argument
 
-singlebehindregexp:
-\\ ,,, [\[][^\[\]]*([^\[\]]*[\[].*[\]][^\[\]]*)*[^\[\]]*[\]]
+// Old, brackets
+// [\[][^\[\]]*([^\[\]]*[\[].*[\]][^\[\]]*)*[^\[\]]*[\]]
+// \\ ,,, [{][^{}]*([^{}]*[{][^{}]*[}][^{}]*)*[^{}]*[}]
+
+singleregexp:
+[\[][\w\s]*[\]]
 color:	    	#A6E22E
 bold:				false
 italic:			false
 underline: 		false
 
 singlebehindregexp:
-\\ ,,, [{][^{}]*([^{}]*[{].*[}][^{}]*)*[^{}]*[}]
+\\ ,,, [{][\w\s]*[}]
 color:			#A6E22E
 bold:				false
 italic:			false

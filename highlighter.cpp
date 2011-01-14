@@ -389,8 +389,8 @@ void Highlighter::loadSyntax(QString filename){
         QString tmp = data.mid(j+1,i-j-1).trimmed();
         tmp.replace("\\n","\n").replace("\\\n","\\n");
         tmp.replace("\\t","\t").replace("\\\t","\\t");
-        editor->quickInsert[m].second = tmp.size()-tmp.indexOf(sep)-1;
-        editor->quickInsert[m].first = tmp.replace(sep,"");
+        editor->quickInsert[m].first = tmp;
+        editor->quickInsert[m].second = sep;
         j = i;
         i = data.indexOf("\n",j+1);
         m++;

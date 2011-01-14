@@ -18,7 +18,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     fileIsOpen = false;
     openFilename = "";
     // Initialize shortcut vector
-    quickInsert = QVector< QPair<QString,int> >(8,QPair<QString,int>("",0));
+    quickInsert = QVector< QPair<QString,QString> >(8,QPair<QString,QString>("",""));
 }
 
 Editor::~Editor(){

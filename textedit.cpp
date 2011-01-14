@@ -26,7 +26,7 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
     // Text cursor
     QTextCursor updateCursor = this->textCursor();
     // End + Newline
-    if ((event->key() == Qt::Key_Return && event->modifiers() == Qt::ControlModifier) || event->key() == Qt::Key_Escape) {
+    if (event->key() == Qt::Key_Return && event->modifiers() == Qt::ControlModifier) {
         updateCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::MoveAnchor);
         updateCursor.insertText("\n");
         this->setTextCursor(updateCursor);
@@ -79,44 +79,57 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
     // Shortcut keys / quickinsert
     switch (event->key()){
     case Qt::Key_F5:
-        updateCursor.insertText(editor->quickInsert[0].first);
-        updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,editor->quickInsert[0].second);
-        this->setTextCursor(updateCursor);
+        this->quickInsert(updateCursor,editor->quickInsert[0].first,editor->quickInsert[0].second);
         break;
     case Qt::Key_F6:
-        updateCursor.insertText(editor->quickInsert[1].first);
-        updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,editor->quickInsert[1].second);
-        this->setTextCursor(updateCursor);
+        this->quickInsert(updateCursor,editor->quickInsert[1].first,editor->quickInsert[1].second);
         break;
     case Qt::Key_F7:
-        updateCursor.insertText(editor->quickInsert[2].first);
-        updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,editor->quickInsert[2].second);
-        this->setTextCursor(updateCursor);
+        this->quickInsert(updateCursor,editor->quickInsert[2].first,editor->quickInsert[2].second);
         break;
     case Qt::Key_F8:
-        updateCursor.insertText(editor->quickInsert[3].first);
-        updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,editor->quickInsert[3].second);
-        this->setTextCursor(updateCursor);
+        this->quickInsert(updateCursor,editor->quickInsert[3].first,editor->quickInsert[3].second);
         break;
     case Qt::Key_F9:
-        updateCursor.insertText(editor->quickInsert[4].first);
-        updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,editor->quickInsert[4].second);
-        this->setTextCursor(updateCursor);
+        this->quickInsert(updateCursor,editor->quickInsert[4].first,editor->quickInsert[4].second);
         break;
     case Qt::Key_F10:
-        updateCursor.insertText(editor->quickInsert[5].first);
-        updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,editor->quickInsert[5].second);
-        this->setTextCursor(updateCursor);
+        this->quickInsert(updateCursor,editor->quickInsert[5].first,editor->quickInsert[5].second);
         break;
     case Qt::Key_F11:
-        updateCursor.insertText(editor->quickInsert[6].first);
-        updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,editor->quickInsert[6].second);
-        this->setTextCursor(updateCursor);
+        this->quickInsert(updateCursor,editor->quickInsert[6].first,editor->quickInsert[6].second);
         break;
     case Qt::Key_F12:
-        updateCursor.insertText(editor->quickInsert[7].first);
-        updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,editor->quickInsert[7].second);
-        this->setTextCursor(updateCursor);
+        this->quickInsert(updateCursor,editor->quickInsert[7].first,editor->quickInsert[7].second);
         break;
     }
+}
+
+void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep){
+    // Needed variables
+    QString sel,lin;
+    int i,j,k,start;
+    // Get selection
+    sel = updateCursor.selectedText();
+    updateCursor.removeSelectedText();
+    // Start position
+    start = updateCursor.position();
+    // Get line
+    while (!updateCursor.atBlockStart()) updateCursor.movePosition(QTextCursor::Left);
+    i = updateCursor.position();
+    while (!updateCursor.atBlockEnd()) updateCursor.movePosition(QTextCursor::Right);
+    j = updateCursor.position();
+    lin = this->toPlainText().mid(i,j-i+1);
+    // Replace parameters and fix space
+    tmp = tmp.replace(sep,"\x99");
+    while (!updateCursor.atBlockStart() && tmp.indexOf("\x99\x99\x99") != -1) updateCursor.deletePreviousChar();
+    tmp = tmp.replace("\x99\x99\x99",lin).replace("\x99\x99",sel);
+    tmp = tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
+    k = tmp.size()-tmp.indexOf("\x99")-1;
+    tmp.replace("\x99","");
+    // Insert and move cursor
+    updateCursor.setPosition(start);
+    updateCursor.insertText(tmp);
+    updateCursor.movePosition(QTextCursor::Left,QTextCursor::MoveAnchor,k);
+    this->setTextCursor(updateCursor);
 }

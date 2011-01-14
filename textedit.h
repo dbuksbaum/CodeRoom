@@ -16,8 +16,11 @@ private:
     Q_OBJECT
     // Pointer to editor
     Editor * editor;
+    // Other variables and objects
     QVector<int> skipKeys;
     bool skipKey;
+    // Private methods
+    void quickInsert(QTextCursor & updateCursor, QString tmp, QString sep);
 protected:
     // On keypress
     void keyPressEvent(QKeyEvent * event);
