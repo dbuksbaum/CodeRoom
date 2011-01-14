@@ -10,7 +10,7 @@
 // multibehindregexp > multiregexp > multilinespan > singlebehindregexp > singleregexp > restofline > singlelinespan > freewords > inlinewords
 // The lower a span appear in this document, the higher the priority. The above still apply though.
 
-// For quickinsert you can use \n and \t only. Place cursor using separator.
+// For quickinsert you can use \n, \t and \s only. Place cursor using separator, marked text will be pasted to double sep, whole line to triple sep.
 
 // Use // to comment. Comment must not contain COLON. Comments should have a free line or another comment above it.
 

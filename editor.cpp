@@ -92,7 +92,7 @@ void Editor::setSyntax(QString filename){
 
 void Editor::chooseSyntax(){
     // Load data
-    QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "", tr("All Files (*)"));
+    QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "syntax", tr("CodeRoom Syn Files (*.syn)"));
     // Check if filename is empty
     if (filename == "") return;
     // Set syntax

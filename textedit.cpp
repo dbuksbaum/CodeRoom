@@ -1,4 +1,6 @@
 #include "textedit.h"
+#include <QDebug>
+#include <QScrollBar>
 
 using namespace std;
 
@@ -7,6 +9,8 @@ TextEdit::TextEdit(Editor * parent) : QTextEdit(parent){
     editor = parent;
     // Only accept plain text
     this->setAcceptRichText(false);
+    // Hide horizonal scrollbar
+    this->horizontalScrollBar()->hide();
 }
 
 void TextEdit::keyPressEvent(QKeyEvent * event){
@@ -77,31 +81,43 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
 	}
     }
     // Shortcut keys / quickinsert
+    int keyF=-1;
     switch (event->key()){
     case Qt::Key_F5:
-        this->quickInsert(updateCursor,editor->quickInsert[0].first,editor->quickInsert[0].second);
+        keyF = 0;
         break;
     case Qt::Key_F6:
-        this->quickInsert(updateCursor,editor->quickInsert[1].first,editor->quickInsert[1].second);
+        keyF = 1;
         break;
     case Qt::Key_F7:
-        this->quickInsert(updateCursor,editor->quickInsert[2].first,editor->quickInsert[2].second);
+        keyF = 2;
         break;
     case Qt::Key_F8:
-        this->quickInsert(updateCursor,editor->quickInsert[3].first,editor->quickInsert[3].second);
+        keyF = 3;
         break;
     case Qt::Key_F9:
-        this->quickInsert(updateCursor,editor->quickInsert[4].first,editor->quickInsert[4].second);
+        keyF = 4;
         break;
     case Qt::Key_F10:
-        this->quickInsert(updateCursor,editor->quickInsert[5].first,editor->quickInsert[5].second);
+        keyF = 5;
         break;
     case Qt::Key_F11:
-        this->quickInsert(updateCursor,editor->quickInsert[6].first,editor->quickInsert[6].second);
+        keyF = 6;
         break;
     case Qt::Key_F12:
-        this->quickInsert(updateCursor,editor->quickInsert[7].first,editor->quickInsert[7].second);
+        keyF = 7;
         break;
+    }
+    // Actual insert + set on the fly
+    if (keyF != -1 && event->modifiers() == Qt::ControlModifier){
+        QString tmp = updateCursor.selectedText().trimmed();
+        tmp.replace("\\n","\n").replace("\\\n","\\n");
+        tmp.replace("\\t","\t").replace("\\\t","\\t");
+        editor->quickInsert[keyF].first = tmp.mid(1);
+        editor->quickInsert[keyF].second = tmp.mid(0,1);
+        updateCursor.removeSelectedText();
+    } else if (keyF != -1) {
+        this->quickInsert(updateCursor,editor->quickInsert[keyF].first,editor->quickInsert[keyF].second);
     }
 }
 
@@ -121,10 +137,10 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     j = updateCursor.position();
     lin = this->toPlainText().mid(i,j-i+1);
     // Replace parameters and fix space
-    tmp = tmp.replace(sep,"\x99");
+    tmp.replace(sep,"\x99");
     while (!updateCursor.atBlockStart() && tmp.indexOf("\x99\x99\x99") != -1) updateCursor.deletePreviousChar();
-    tmp = tmp.replace("\x99\x99\x99",lin).replace("\x99\x99",sel);
-    tmp = tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
+    tmp.replace("\x99\x99\x99",lin).replace("\x99\x99",sel);
+    tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
     k = tmp.size()-tmp.indexOf("\x99")-1;
     tmp.replace("\x99","");
     // Insert and move cursor
