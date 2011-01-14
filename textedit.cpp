@@ -138,11 +138,12 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     lin = this->toPlainText().mid(i,j-i+1);
     // Replace parameters and fix space
     tmp.replace(sep,"\x99");
-    while (!updateCursor.atBlockStart() && tmp.indexOf("\x99\x99\x99") != -1) updateCursor.deletePreviousChar();
-    tmp.replace("\x99\x99\x99",lin).replace("\x99\x99",sel);
+    tmp.replace("\x99\x99\x99","\x92").replace("\x99\x99","\x91").replace("\x99","\x90");
     tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
-    k = tmp.size()-tmp.indexOf("\x99")-1;
-    tmp.replace("\x99","");
+    while (!updateCursor.atBlockStart() && tmp.indexOf("\x92") != -1) updateCursor.deletePreviousChar();
+    tmp.replace("\x92",lin).replace("\x91",sel);
+    k = tmp.size()-tmp.indexOf("\x90")-1;
+    tmp.replace("\x90","");
     // Insert and move cursor
     updateCursor.setPosition(start);
     updateCursor.insertText(tmp);
