@@ -27,8 +27,6 @@ bold:				false
 italic:			false
 underline: 		false
 
-inlinewords:
-[ , ]
 color:			#A6E22E
 bold:				false
 italic:			false
@@ -66,14 +64,14 @@ underline: 		false
 // The expression cannot start with first argument
 
 singlebehindregexp:
-\\ ,,, [[][^]]*[]]
-color:	    #A6E22E
+\\ ,,, [\[][^\[\]]*([^\[\]]*[\[].*[\]][^\[\]]*)*[^\[\]]*[\]]
+color:	    	#A6E22E
 bold:				false
 italic:			false
 underline: 		false
 
 singlebehindregexp:
-\\ ,,, [{][^}]*[}]
+\\ ,,, [{][^{}]*([^{}]*[{].*[}][^{}]*)*[^{}]*[}]
 color:			#A6E22E
 bold:				false
 italic:			false
