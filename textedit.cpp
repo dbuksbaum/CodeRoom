@@ -1,4 +1,5 @@
 #include "textedit.h"
+#include <QProcess>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ TextEdit::TextEdit(Editor * parent) : QTextEdit(parent){
 void TextEdit::keyPressEvent(QKeyEvent * event){
     // Keys to skip
     skipKey = false;
-    skipKeys << Qt::Key_F10 << Qt::Key_F5 << Qt::Key_F6 << Qt::Key_F7 << Qt::Key_F8 << Qt::Key_F9 << Qt::Key_F10 << Qt::Key_F11 << Qt::Key_F12;
+    skipKeys << Qt::Key_F1 << Qt::Key_F10 << Qt::Key_F5 << Qt::Key_F6 << Qt::Key_F7 << Qt::Key_F8 << Qt::Key_F9 << Qt::Key_F10 << Qt::Key_F11 << Qt::Key_F12;
     for (int i = 0; i != skipKeys.size(); i++){
         if (event->key() == skipKeys[i]){
             skipKey = true;
@@ -48,9 +49,15 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
 	    i++;
 	}
     }
+    // Open readme
+    if (event->key() == Qt::Key_F1) {
+        if (editor->checkAndSave()){
+            editor->openFile("config.cfg");
+        }
+    }
     // Save file
     if (event->key() == Qt::Key_S && event->modifiers() == Qt::ControlModifier) {
-	editor->saveFile();
+        editor->saveFile();
     }
     // Save file as
     if (event->key() == Qt::Key_W && event->modifiers() == Qt::ControlModifier) {
@@ -121,7 +128,7 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
 
 void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep){
     // Needed variables
-    QString sel,lin;
+    QString sel,lin,wrd;
     QString data = this->toPlainText();
     int i,j,k,start;
     // Get selection
@@ -136,33 +143,33 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     i++;
     while (data.mid(j,1) != "\n" && j <= data.size()) j++;
     j--;
-    /*
-    while (this->toPlainText().mid(updateCursor.position(),1) != "\n" && !updateCursor.atStart()) updateCursor.movePosition(QTextCursor::Left);
-    if (updateCursor.atStart()) i = updateCursor.position();
-    else i = updateCursor.position()+1;
-    updateCursor.movePosition(QTextCursor::Right);
-    while (this->toPlainText().mid(updateCursor.position(),1) != "\n" && !updateCursor.atEnd()) updateCursor.movePosition(QTextCursor::Right);
-    if (updateCursor.atEnd()) j = updateCursor.position();
-    else j = updateCursor.position()-1;
-    */
     lin = (j-i+1 > 0) ? data.mid(i,j-i+1) : "";
+    // Get word
+    i = updateCursor.position()-1;
+    j = i;
+    while ((data.mid(i,1) != " " && data.mid(i,1) != "\n" && data.mid(i,1) != "\t") && i != -1) i--;
+    i++;
+    while ((data.mid(j,1) != " " && data.mid(j,1) != "\n" && data.mid(j,1) != "\t") && j <= data.size()) j++;
+    j--;
+    wrd = (j-i+1 > 0) ? data.mid(i,j-i+1) : "";
     // Replace parameters and fix space
     tmp.replace(sep,"\x99");
-    tmp.replace("\x99\x99\x99","\x92").replace("\x99\x99","\x91").replace("\x99","\x90");
+    tmp.replace("\x99\x99\x99\x99","\x93").replace("\x99\x99\x99","\x92").replace("\x99\x99","\x91").replace("\x99","\x90");
     tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
     // Delete line if lin exists
-    if (tmp.indexOf("\x92") != -1 ){
+    if (tmp.indexOf("\x92") != -1 && lin != ""){
 	j++;
 	updateCursor.setPosition(j);
-	while (!updateCursor.atBlockStart()) { //j > i
-	    //if (j == 0 || this->toPlainText().mid(j-1,1) == "\n") break;
-	    updateCursor.deletePreviousChar();
-	    //j--;
-	}
+        while (!updateCursor.atBlockStart()) updateCursor.deletePreviousChar();
+    } else if (tmp.indexOf("\x93") != -1 && wrd != "") {
+        j++;
+        updateCursor.setPosition(j);
+        while (updateCursor.position() != 0 && data.mid(updateCursor.position()-1,1) != " "
+               && data.mid(updateCursor.position()-1,1) != "\n" && data.mid(updateCursor.position()-1,1) != "\t") updateCursor.deletePreviousChar();
     }
     //if (lin == "\n") lin = "";
-    if (tmp.indexOf("\x92") != -1) start = updateCursor.position();
-    tmp.replace("\x92",lin).replace("\x91",sel);
+    if (tmp.indexOf("\x92") || tmp.indexOf("\x93") != -1) start = updateCursor.position();
+    tmp.replace("\x93",wrd).replace("\x92",lin).replace("\x91",sel);
     k = tmp.size()-tmp.indexOf("\x90")-1;
     tmp.replace("\x90","");
     // Insert and move cursor

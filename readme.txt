@@ -22,6 +22,7 @@ First symbol:      Defined separator, sep
 sep:               Cursor location
 sepsep:            Will be replaced by marked text, when command is pressed
 sepsepsep:         Will be replaced by the current line, when command is pressed
+sepsepsepsep:      Will be replaced by the current word, when command is pressed
 \\n:               Plain text \n
 \\t:               Plain text \t
 \\s:               Plain text \s
