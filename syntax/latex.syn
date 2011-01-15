@@ -68,22 +68,15 @@ underline: 		false
 // \\ ,,, [{][^{}]*([^{}]*[{][^{}]*[}][^{}]*)*[^{}]*[}]
 
 singleregexp:
-[\[][\w\s]*[\]]
+[\[][^\[\]]*[\]]
 color:	    	#A6E22E
 bold:				false
 italic:			false
 underline: 		false
 
 singlebehindregexp:
-\\ ,,, [{][\w\s]*[}]
+\\ ,,, [{][^{}]*[}]
 color:			#A6E22E
-bold:				false
-italic:			false
-underline: 		false
-
-multibehindregexp:
-\\ ,,, [%] ,,, .*[^\n]
-color:			#75715E
 bold:				false
 italic:			false
 underline: 		false
@@ -105,6 +98,13 @@ underline: 		false
 multiregexp:
 [\\][\[] ,,, [\\][\]]
 color:			#E6DB74
+bold:				false
+italic:			false
+underline: 		false
+
+multibehindregexp:
+\\ ,,, [%] ,,, [^\n]*
+color:			#75715E
 bold:				false
 italic:			false
 underline: 		false
