@@ -1,6 +1,7 @@
 #include "textedit.h"
 #include <QDebug>
 #include <QScrollBar>
+#include <algorithm>
 
 using namespace std;
 
@@ -147,7 +148,7 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     if (updateCursor.atEnd()) j = updateCursor.position();
     else j = updateCursor.position()-1;
     */
-    lin = data.mid(i,j-i+1);
+    lin = (j-i+1 > 0) ? data.mid(i,j-i+1) : "";
     // Replace parameters and fix space
     tmp.replace(sep,"\x99");
     tmp.replace("\x99\x99\x99","\x92").replace("\x99\x99","\x91").replace("\x99","\x90");
@@ -157,7 +158,7 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
 	j++;
 	updateCursor.setPosition(j);
     }
-    while (j != i && tmp.indexOf("\x92") != -1) {
+    while (j > i && tmp.indexOf("\x92") != -1) {
 	updateCursor.deletePreviousChar();
 	j--;
     }
