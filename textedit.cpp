@@ -124,6 +124,7 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
 void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep){
     // Needed variables
     QString sel,lin;
+    QString data = this->toPlainText();
     int i,j,k,start;
     // Get selection
     sel = updateCursor.selectedText();
@@ -131,16 +132,36 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     // Start position
     start = updateCursor.position();
     // Get line
-    while (!updateCursor.atBlockStart()) updateCursor.movePosition(QTextCursor::Left);
-    i = updateCursor.position();
-    while (!updateCursor.atBlockEnd()) updateCursor.movePosition(QTextCursor::Right);
-    j = updateCursor.position();
-    lin = this->toPlainText().mid(i,j-i+1);
+    i = updateCursor.position()-1;
+    j = i;
+    while (data.mid(i,1) != "\n" && i != -1) i--;
+    i++;
+    while (data.mid(j,1) != "\n" && j <= data.size()) j++;
+    j--;
+    /*
+    while (this->toPlainText().mid(updateCursor.position(),1) != "\n" && !updateCursor.atStart()) updateCursor.movePosition(QTextCursor::Left);
+    if (updateCursor.atStart()) i = updateCursor.position();
+    else i = updateCursor.position()+1;
+    updateCursor.movePosition(QTextCursor::Right);
+    while (this->toPlainText().mid(updateCursor.position(),1) != "\n" && !updateCursor.atEnd()) updateCursor.movePosition(QTextCursor::Right);
+    if (updateCursor.atEnd()) j = updateCursor.position();
+    else j = updateCursor.position()-1;
+    */
+    lin = data.mid(i,j-i+1);
     // Replace parameters and fix space
     tmp.replace(sep,"\x99");
     tmp.replace("\x99\x99\x99","\x92").replace("\x99\x99","\x91").replace("\x99","\x90");
     tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
-    while (!updateCursor.atBlockStart() && tmp.indexOf("\x92") != -1) updateCursor.deletePreviousChar();
+    // Delete line if lin exists
+    if (tmp.indexOf("\x92")){
+	j++;
+	updateCursor.setPosition(j);
+    }
+    while (j != i && tmp.indexOf("\x92") != -1) {
+	updateCursor.deletePreviousChar();
+	j--;
+    }
+    if (tmp.indexOf("\x92") != -1) start = updateCursor.position();
     tmp.replace("\x92",lin).replace("\x91",sel);
     k = tmp.size()-tmp.indexOf("\x90")-1;
     tmp.replace("\x90","");
