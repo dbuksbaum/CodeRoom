@@ -1,7 +1,4 @@
 #include "textedit.h"
-#include <QDebug>
-#include <QScrollBar>
-#include <algorithm>
 
 using namespace std;
 
@@ -154,14 +151,16 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     tmp.replace("\x99\x99\x99","\x92").replace("\x99\x99","\x91").replace("\x99","\x90");
     tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
     // Delete line if lin exists
-    if (tmp.indexOf("\x92")){
+    if (tmp.indexOf("\x92") != -1 ){
 	j++;
 	updateCursor.setPosition(j);
+	while (!updateCursor.atBlockStart()) { //j > i
+	    //if (j == 0 || this->toPlainText().mid(j-1,1) == "\n") break;
+	    updateCursor.deletePreviousChar();
+	    //j--;
+	}
     }
-    while (j > i && tmp.indexOf("\x92") != -1) {
-	updateCursor.deletePreviousChar();
-	j--;
-    }
+    //if (lin == "\n") lin = "";
     if (tmp.indexOf("\x92") != -1) start = updateCursor.position();
     tmp.replace("\x92",lin).replace("\x91",sel);
     k = tmp.size()-tmp.indexOf("\x90")-1;

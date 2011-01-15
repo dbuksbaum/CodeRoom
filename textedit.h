@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QString>
 #include <QVector>
+#include <QScrollBar>
 
 class Editor;
 
