@@ -4,14 +4,14 @@
 separator:,
 
 quickinsert:
-\cite{,,,, ,}
-\ref{,,,, ,}
-\label{,,,, ,}
+\cite{,,,,},
+\ref{,,,,},
+\label{,,,,},
 \begin{,,,}\n\t,, ,\n\end{,,,}
-$,,,, ,$
-\[,,,, ,\]
-[,,,, ,]
-{,,,, ,}
+$,, ,$
+\[,, ,\]
+[,, ,]
+{,, ,}
 
 singleregexp:
 \d
