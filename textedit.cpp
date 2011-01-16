@@ -15,7 +15,7 @@ TextEdit::TextEdit(Editor * parent) : QTextEdit(parent){
 void TextEdit::keyPressEvent(QKeyEvent * event){
     // Keys to skip
     skipKey = false;
-    skipKeys << Qt::Key_F1 << Qt::Key_F10 << Qt::Key_F5 << Qt::Key_F6 << Qt::Key_F7 << Qt::Key_F8 << Qt::Key_F9 << Qt::Key_F10 << Qt::Key_F11 << Qt::Key_F12;
+    skipKeys << Qt::Key_F1 << Qt::Key_F2 << Qt::Key_F10 << Qt::Key_F5 << Qt::Key_F6 << Qt::Key_F7 << Qt::Key_F8 << Qt::Key_F9 << Qt::Key_F10 << Qt::Key_F11 << Qt::Key_F12;
     for (int i = 0; i != skipKeys.size(); i++){
         if (event->key() == skipKeys[i]){
             skipKey = true;
@@ -52,7 +52,21 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
     // Open readme
     if (event->key() == Qt::Key_F1) {
         if (editor->checkAndSave()){
-            editor->openFile("config.cfg");
+            try {
+                editor->openFile("readme.txt");
+            } catch (...){
+                editor->strToData("Error opening readme.txt");
+            }
+        }
+    }
+    // Open config
+    if (event->key() == Qt::Key_F2) {
+        if (editor->checkAndSave()){
+            try {
+                editor->openFile("config.cfg");
+            } catch (...){
+                editor->strToData("Error opening config.cfg");
+            }
         }
     }
     // Save file
@@ -128,9 +142,9 @@ void TextEdit::keyPressEvent(QKeyEvent * event){
 
 void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep){
     // Needed variables
-    QString sel,lin,wrd;
+    QString sel,lin,wrd,lintab;
     QString data = this->toPlainText();
-    int i,j,k,start;
+    int i,j,k,start,tab;
     // Get selection
     sel = updateCursor.selectedText();
     updateCursor.removeSelectedText();
@@ -144,6 +158,14 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     while (data.mid(j,1) != "\n" && j <= data.size()) j++;
     j--;
     lin = (j-i+1 > 0) ? data.mid(i,j-i+1) : "";
+    // Check for tabs
+    lintab = "";
+    tab = 0;
+    while (lin.mid(tab,1) == "\t") {
+        tab++;
+        lintab += "\t";
+    }
+    lin.remove(0,tab);
     // Get word
     i = updateCursor.position()-1;
     j = i;
@@ -154,10 +176,11 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     wrd = (j-i+1 > 0) ? data.mid(i,j-i+1) : "";
     // Replace parameters and fix space
     tmp.replace(sep,"\x99");
+    tmp.insert(0,lintab).replace("\n","\n"+lintab);     // Correct indentation
     tmp.replace("\x99\x99\x99\x99","\x93").replace("\x99\x99\x99","\x92").replace("\x99\x99","\x91").replace("\x99","\x90");
     tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
-    // Delete line if lin exists
-    if (tmp.indexOf("\x92") != -1 && lin != ""){
+    // Delete line if lin exists and word if wrd exists
+    if (tmp.indexOf("\x92") != -1 && (lin != "" || tab > 0)){
 	j++;
 	updateCursor.setPosition(j);
         while (!updateCursor.atBlockStart()) updateCursor.deletePreviousChar();

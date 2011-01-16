@@ -188,24 +188,34 @@ QString Editor::fileToStr(QString filename){
 }
 
 bool Editor::checkAndSave(){
-    if ( (fileIsOpen && textField->toPlainText() != this->fileToStr(openFilename)) || (!fileIsOpen && !textField->toPlainText().isEmpty()) ){
-	QMessageBox saveBox;
-	saveBox.setText("The document has been modified.");
-	saveBox.setInformativeText("Do you want to save your changes?");
-	saveBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-	saveBox.setDefaultButton(QMessageBox::Save);
-	int save = saveBox.exec();
-	switch (save) {
-	case QMessageBox::Save:
-	    this->saveFile();
-	    return true;
-	case QMessageBox::Discard:
-	    return true;
-	case QMessageBox::Cancel:
-	    return false;
-	default:
-	    return false;
-	}
+    // Check if file has been removed
+    if (fileIsOpen){
+        try {
+            this->fileToStr(openFilename);
+        } catch (...) {
+            fileIsOpen = false;
+            openFilename = "";
+        }
+    }
+    // Check and save
+    if ( (fileIsOpen && textField->toPlainText().trimmed() != this->fileToStr(openFilename).trimmed()) || (!fileIsOpen && !textField->toPlainText().isEmpty()) ){
+        QMessageBox saveBox;
+        saveBox.setText("The document has been modified.");
+        saveBox.setInformativeText("Do you want to save your changes?");
+        saveBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        saveBox.setDefaultButton(QMessageBox::Save);
+        int save = saveBox.exec();
+        switch (save) {
+        case QMessageBox::Save:
+            this->saveFile();
+            return true;
+        case QMessageBox::Discard:
+            return true;
+        case QMessageBox::Cancel:
+            return false;
+        default:
+            return false;
+        }
     }
     // If file is unchanged, allow action
     return true;
