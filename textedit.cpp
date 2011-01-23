@@ -176,8 +176,8 @@ void TextEdit::quickInsert(QTextCursor & updateCursor, QString tmp, QString sep)
     wrd = (j-i+1 > 0) ? data.mid(i,j-i+1) : "";
     // Replace parameters and fix space
     tmp.replace(sep,"\x99");
-    tmp.insert(0,lintab).replace("\n","\n"+lintab);     // Correct indentation
     tmp.replace("\x99\x99\x99\x99","\x93").replace("\x99\x99\x99","\x92").replace("\x99\x99","\x91").replace("\x99","\x90");
+    if (tmp.indexOf("\x92") != -1) tmp.insert(0,lintab).replace("\n","\n"+lintab);     // Correct indentation
     tmp.replace(" ","").replace("\\\\s","\x98").replace("\\s"," ").replace("\x98","\\s");
     // Delete line if lin exists and word if wrd exists
     if (tmp.indexOf("\x92") != -1 && (lin != "" || tab > 0)){
