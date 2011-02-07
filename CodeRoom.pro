@@ -13,11 +13,13 @@ RC_FILE = coderoom.rc
 SOURCES += main.cpp\
         editor.cpp \
     textedit.cpp \
-    highlighter.cpp
+    highlighter.cpp \
+    textfind.cpp
 
 HEADERS  += editor.h \
     textedit.h \
-    highlighter.h
+    highlighter.h \
+    textfind.h
 
 OTHER_FILES += \
     syntax/cpp.syn \
